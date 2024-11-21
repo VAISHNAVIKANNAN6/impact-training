@@ -1,0 +1,136 @@
+1. Normalization
+
+Normalization is the process of organizing data in a database to reduce redundancy and improve data integrity. The goal is to ensure that the database structure is efficient, avoids anomalies, and maintains consistency.
+
+Key Concepts:
+
+First Normal Form (1NF):
+Eliminate duplicate columns.
+Ensure that each field contains only atomic (indivisible) values.
+All entries in a column must be of the same type.
+
+Second Normal Form (2NF):
+Achieved when the database is in 1NF.
+Eliminate partial dependency: every non-key attribute must be fully dependent on the primary key (no partial dependency on a part of the primary key).
+
+Third Normal Form (3NF):
+Achieved when the database is in 2NF.
+Eliminate transitive dependency: non-key attributes should not depend on other non-key attributes.
+
+Boyce-Codd Normal Form (BCNF):
+A stronger version of 3NF.
+Every determinant (attribute or set of attributes that can uniquely identify a tuple) must be a candidate key.
+Fourth Normal Form (4NF):
+Achieved when the database is in BCNF.
+Eliminate multi-valued dependencies: a record should not contain more than one independent multi-valued fact.
+
+Benefits of Normalization:
+Reduces data redundancy and storage costs.
+Ensures consistency by preventing anomalies (insert, update, and delete anomalies).
+Simplifies data maintenance.
+
+
+2. ACID Properties
+
+ACID stands for a set of properties that guarantee reliable transactions in a database system. It ensures that the database remains in a consistent state even in the event of power outages, system crashes, or other failures.
+
+ACID Properties:
+Atomicity:
+A transaction is all-or-nothing. It must either complete fully or not at all. If part of a transaction fails, the entire transaction is rolled back.
+
+Consistency:
+A transaction brings the database from one valid state to another, maintaining all database rules, constraints, and triggers.
+
+Isolation:
+Multiple transactions occurring simultaneously should not affect each other's execution. The results of a transaction are not visible to others until it is completed.
+
+Durability:
+Once a transaction is committed, its changes are permanent and survive system crashes or power failures.
+
+Importance:
+Ensures reliability and correctness of the database even during system failures.
+Guarantees data integrity and consistency across multiple users and applications.
+3. Codd’s 12 Rules (Codd’s Rules)
+Dr. E.F. Codd, the inventor of the relational model, outlined 12 rules that a DBMS must follow to be considered a true relational database. These rules define the ideal behavior of relational databases.
+
+Key Codd’s Rules:
+Information Rule:
+All information in a relational database is represented by values in tables (rows and columns).
+
+Guaranteed Access Rule:
+Every data element is accessible using a combination of table name, primary key, and column name.
+
+Systematic Treatment of Null Values:
+Null values must be treated consistently and must be distinguishable from other values.
+
+Dynamic On-line Catalog:
+The DBMS must have a catalog (metadata) that is accessible by users for the description of the database.
+
+Comprehensive Data Sub-language Rule:
+The DBMS must support a comprehensive data sub-language, which includes capabilities for data definition, manipulation, and control.
+
+View Updating Rule:
+All views (virtual tables) must be updatable if the underlying data allows it.
+
+High-Level Insert, Update, Delete:
+The DBMS must support set-oriented operations for insertion, update, and deletion, not just record-by-record operations.
+
+Physical Data Independence:
+Changes in the physical storage of data should not affect the logical view of the data (i.e., how users interact with the database).
+
+Logical Data Independence:
+Changes in the logical schema (e.g., tables, columns) should not affect application programs or user queries.
+
+Integrity Independence:
+The DBMS must support constraints and ensure that they are enforced independently of the application code.
+
+Distribution Independence:
+The DBMS should support distribution of data across multiple locations without affecting the user’s ability to query or modify the data.
+
+Non-subversion Rule:
+No command can be used to bypass the relational model and access the data in ways that are not allowed by the model.
+
+Importance:
+Codd's rules lay the foundation for what constitutes a "true" relational database.
+Ensures consistency, reliability, and flexibility in the database system.
+4. DBMS (Database Management System)
+A Database Management System (DBMS) is a software system that enables users to define, create, maintain, and control access to databases. It acts as an interface between the database and the users or applications, ensuring efficient data management and secure access.
+
+Types of DBMS:
+Hierarchical DBMS:
+Data is organized in a tree-like structure, where each record has a single parent and possibly many children (e.g., IBM's Information Management System).
+
+Network DBMS:
+Similar to hierarchical DBMS but allows more complex relationships, with records potentially having multiple parent and child records (e.g., Integrated Data Store).
+
+Relational DBMS (RDBMS):
+Data is organized into tables (relations) with rows and columns. The relationships between tables are established through keys (e.g., MySQL, PostgreSQL, Oracle).
+
+Object-oriented DBMS:
+Data is represented as objects, similar to the structure in object-oriented programming languages (e.g., db4o).
+
+Functions of a DBMS:
+Data Definition:
+The DBMS allows users to define the structure of the data (e.g., tables, columns, and data types).
+
+Data Manipulation:
+It provides facilities for inserting, updating, deleting, and querying the data.
+
+Data Security:
+DBMS provides features for controlling access to the data by defining user roles and permissions.
+
+Data Integrity:
+It ensures data consistency and accuracy through constraints like primary keys, foreign keys, and unique constraints.
+
+Concurrency Control:
+The DBMS manages simultaneous access to the database by multiple users, ensuring that transactions do not interfere with each other.
+
+Backup and Recovery:
+DBMS provides tools to back up data and recover it in case of a failure.
+
+Advantages of DBMS:
+Centralized data management.
+Data consistency and integrity.
+Improved data security.
+Concurrent access management.
+Easier backup and recovery.

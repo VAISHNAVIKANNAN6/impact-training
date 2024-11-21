@@ -1,0 +1,93 @@
+Introduction to SQL
+
+What is SQL (Structured Query Language)?
+SQL vs NoSQL
+Types of SQL: DDL (Data Definition Language), DML (Data Manipulation Language), DCL (Data Control Language), TCL (Transaction Control Language)
+Database Basics
+
+What is a Database?
+What is a DBMS (Database Management System)?
+Types of Databases: Relational, Non-relational, etc.
+Database Schema and Tables
+SQL Data Types
+
+Numeric Data Types (INT, FLOAT, DECIMAL)
+String Data Types (CHAR, VARCHAR, TEXT)
+Date and Time Data Types (DATE, TIME, DATETIME)
+Other Data Types (BOOLEAN, BLOB, etc.)
+Basic SQL Commands
+
+SELECT: Querying data from a table
+INSERT: Inserting data into a table
+UPDATE: Updating existing data in a table
+DELETE: Deleting data from a table
+CREATE TABLE: Creating a new table
+ALTER TABLE: Modifying an existing table
+DROP TABLE: Deleting a table from the database
+SQL Clauses
+
+WHERE: Filtering records
+ORDER BY: Sorting results
+GROUP BY: Grouping data for aggregation
+HAVING: Filtering grouped data
+LIMIT/OFFSET: Limiting results
+SQL Operators
+
+Comparison Operators: =, <>, <, >, <=, >=
+Logical Operators: AND, OR, NOT
+Wildcards: LIKE, IN, BETWEEN, IS NULL
+Arithmetic Operators: +, -, *, /
+SQL Joins
+
+INNER JOIN: Combining rows from two tables where there is a match
+LEFT JOIN (OUTER JOIN): Includes all records from the left table and matching records from the right table
+RIGHT JOIN (OUTER JOIN): Includes all records from the right table and matching records from the left table
+FULL JOIN (OUTER JOIN): Includes records when there is a match in either left or right table
+SQL Subqueries
+
+Single-row Subquery
+Multi-row Subquery
+Correlated Subquery
+SQL Functions
+
+Aggregate Functions: COUNT(), SUM(), AVG(), MIN(), MAX()
+String Functions: CONCAT(), LENGTH(), UPPER(), LOWER(), SUBSTRING()
+Date Functions: NOW(), CURDATE(), DATE_ADD(), DATEDIFF()
+Mathematical Functions: ROUND(), CEIL(), FLOOR()
+SQL Constraints
+
+PRIMARY KEY: Uniquely identifies each record in a table
+FOREIGN KEY: Ensures referential integrity between two tables
+UNIQUE: Ensures all values in a column are unique
+NOT NULL: Ensures that a column cannot have NULL values
+CHECK: Ensures that all values in a column satisfy a condition
+Normalization
+
+Concept of Normalization
+Normal Forms: 1NF (First Normal Form), 2NF (Second Normal Form), 3NF (Third Normal Form), BCNF (Boyce-Codd Normal Form)
+Indexes
+
+What is an Index?
+Types of Indexes: Unique Index, Composite Index
+Benefits and Drawbacks of Indexing
+Transactions
+
+ACID Properties (Atomicity, Consistency, Isolation, Durability)
+COMMIT: Saving changes to the database
+ROLLBACK: Reverting changes to the database
+SAVEPOINT: Creating a save point within a transaction
+SQL Views
+
+What is a View?
+Benefits of Using Views
+Creating and Dropping Views
+SQL Security
+
+User Authentication and Authorization
+GRANT and REVOKE commands
+Role-based Access Control
+SQL Optimization
+
+Query Performance Optimization
+Indexing for Faster Queries
+Analyzing Execution Plans

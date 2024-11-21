@@ -1,0 +1,155 @@
+
+1.To create a stored procedure in PL/SQL that takes a product ID as an input parameter and returns the product details (product name, quantity, and price), you can follow these steps.
+
+Let's assume you have a table called products with the following structure:
+
+sql
+Copy code
+CREATE TABLE products (
+    product_id NUMBER PRIMARY KEY,
+    product_name VARCHAR2(100),
+    quantity NUMBER,
+    price NUMBER
+);
+
+
+Stored Procedure Creation:
+
+CREATE OR REPLACE PROCEDURE get_product_details (
+    p_product_id IN NUMBER,          -- Input parameter: Product ID
+    p_product_name OUT VARCHAR2,     -- Output parameter: Product Name
+    p_quantity OUT NUMBER,          -- Output parameter: Quantity
+    p_price OUT NUMBER              -- Output parameter: Price
+) IS
+BEGIN
+    -- Query to retrieve the product details using the input product_id
+    SELECT product_name, quantity, price
+    INTO p_product_name, p_quantity, p_price
+    FROM products
+    WHERE product_id = p_product_id;
+
+    -- Exception handling if product_id is not found
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_product_name := NULL;
+        p_quantity := NULL;
+        p_price := NULL;
+        DBMS_OUTPUT.PUT_LINE('Product not found.');
+    WHEN OTHERS THEN
+        p_product_name := NULL;
+        p_quantity := NULL;
+        p_price := NULL;
+        DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+END get_product_details;
+
+Example--- To execute the stored procedure, you can use an anonymous PL/SQL block or call it from your application
+
+DECLARE
+    v_product_name VARCHAR2(100);
+    v_quantity     NUMBER;
+    v_price        NUMBER;
+BEGIN
+    -- Call the stored procedure
+    get_product_details(101, v_product_name, v_quantity, v_price);
+    
+    -- Output the results
+    DBMS_OUTPUT.PUT_LINE('Product Name: ' || v_product_name);
+    DBMS_OUTPUT.PUT_LINE('Quantity: ' || v_quantity);
+    DBMS_OUTPUT.PUT_LINE('Price: ' || v_price);
+END;
+
+
+OUTPUT :
+
+Product Name: Widget A
+Quantity: 50
+Price: 25
+
+
+lets assume we have table like
+
+product_id	product_name	quantity	price
+101		Widget A	50		25.00
+102		Widget B	30		15.00
+103		Widget C	10		40.00
+
+
+
+2.In PL/SQL, you cannot directly return an entire table from a function or stored procedure like you would with a SELECT * query in SQL.
+ However, you can return multiple rows or an entire result set in several ways, depending on your needs and the specific use case
+
+Cursor: Used in procedures to fetch and process multiple rows in a loop.
+Ref Cursor: A cursor that can be passed to and used by the caller to fetch multiple rows.
+Collection Types: You can use TABLE or VARRAY to return multiple rows from a function.
+Table Function: You can return a table-like structure that behaves like a regular table in a SELECT statement.
+
+Why Can't You Return an Entire Table Directly from a PL/SQL Function or Procedure?
+PL/SQL is for Logic, Not for Querying Data:
+
+PL/SQL is a procedural language used to write logic (like loops, conditions, etc.), while SQL is used to retrieve and manipulate data in the database.
+PL/SQL functions and procedures don't work like a simple SELECT query. You can't just return a table or a set of rows directly.
+PL/SQL Functions/Procedures Return One Value:
+
+A function in PL/SQL is designed to return one value, like a number or text, not a full table of results.
+A procedure doesn't return a value directly, but it can pass results to you through OUT parameters, which are usually single values (not entire tables).
+So, How Can We Return Multiple Rows (Like a Table)?
+Even though we can't return a table directly, there are ways to get the same result:
+
+1. Using a Cursor (Pointer to a Result Set)
+A cursor allows you to fetch multiple rows one by one. You can't directly return an entire result set from a function, but you can return a cursor (which is like a pointer) that points to the result set.
+The calling program can then use this cursor to get the rows.
+eg:A procedure can return a cursor with all the products in a table, and you can loop through that cursor to process each product one by one.
+
+2. Using Collections (Arrays):
+In PL/SQL, you can use collections (like arrays or lists) to store multiple values. You can create a collection that holds all the product names or IDs and then return that collection.
+eg:A function can collect all product names in a list and return that list to the caller.
+
+3. Using Table Functions (in Oracle)
+In Oracle, you can write a table function that allows you to return multiple rows just like a table. It's still a bit different than a regular query, but it can make the function look like it's returning a result set.
+
+
+3.create function and find out which of the product is expensive
+CREATE OR REPLACE FUNCTION compare_product_prices (
+    p_product_id_1 IN NUMBER,   -- First product ID
+    p_product_id_2 IN NUMBER    -- Second product ID
+) RETURN VARCHAR2 IS
+    v_price_1   products.price%TYPE;  -- Price of the first product
+    v_price_2   products.price%TYPE;  -- Price of the second product
+    v_message   VARCHAR2(400);         -- Message to return
+BEGIN
+    -- Get the price of the first product
+    SELECT price
+    INTO v_price_1
+    FROM products
+    WHERE product_id = p_product_id_1;
+
+    -- Get the price of the second product
+    SELECT price
+    INTO v_price_2
+    FROM products
+    WHERE product_id = p_product_id_2;
+
+    -- Compare the prices and construct the message
+    IF v_price_1 < v_price_2 THEN
+        v_message := 'Product ' || p_product_id_1 || ' is cheaper (Price: ' || v_price_1 || ') and Product ' || p_product_id_2 || ' is more expensive (Price: ' || v_price_2 || ').';
+    ELSIF v_price_1 > v_price_2 THEN
+        v_message := 'Product ' || p_product_id_2 || ' is cheaper (Price: ' || v_price_2 || ') and Product ' || p_product_id_1 || ' is more expensive (Price: ' || v_price_1 || ').';
+    ELSE
+        v_message := 'Both products have the same price (' || v_price_1 || ').';
+    END IF;
+
+    -- Return the comparison message
+    RETURN v_message;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'One or both products not found in the database.';
+    WHEN OTHERS THEN
+        RETURN 'An unexpected error occurred: ' || SQLERRM;
+END compare_product_prices;
+
+output:
+Widget B (Product ID: 102) is cheaper (Price: 15.00) and Widget A (Product ID: 101) is more expensive (Price: 25.00).
+
+
+

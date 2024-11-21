@@ -1,0 +1,64 @@
+1. Select all columns from a table:
+SELECT * FROM employees;
+2. Select specific columns from a table:
+SELECT first_name, last_name FROM employees;
+3. Select data with a WHERE condition:
+SELECT * FROM employees WHERE department = 'HR';
+4. Select with a LIKE operator (pattern matching):
+SELECT * FROM employees WHERE first_name LIKE 'J%';
+5. Select with AND/OR conditions:
+SELECT * FROM employees WHERE department = 'Sales' AND salary > 50000;
+6. Select data with ORDER BY (ascending):
+SELECT * FROM employees ORDER BY salary;
+7. Select data with ORDER BY (descending):
+SELECT * FROM employees ORDER BY salary DESC;
+8. Select data and limit the number of results:
+SELECT * FROM employees LIMIT 5;
+9. Select data using DISTINCT (unique records):
+SELECT DISTINCT department FROM employees;
+10. Count the number of records in a table:
+SELECT COUNT(*) FROM employees;
+11. Find the average salary of employees:
+SELECT AVG(salary) FROM employees;
+12. Find the highest salary in the company:
+SELECT MAX(salary) FROM employees;
+13. Group employees by department and count them:
+SELECT department, COUNT(*) FROM employees GROUP BY department;
+14. Find the sum of salaries by department:
+SELECT department, SUM(salary) FROM employees GROUP BY department;
+15. Select with a subquery (inner query in WHERE clause):
+SELECT first_name, last_name FROM employees
+WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'Sales');
+16. Inner Join between two tables:
+SELECT employees.first_name, departments.department_name
+FROM employees
+INNER JOIN departments ON employees.department_id = departments.department_id;
+17. Left Join between two tables:
+SELECT employees.first_name, departments.department_name
+FROM employees
+LEFT JOIN departments ON employees.department_id = departments.department_id;
+18. Update an existing record in a table:
+UPDATE employees
+SET salary = 70000
+WHERE employee_id = 1;
+19. Delete a record from a table:
+DELETE FROM employees WHERE employee_id = 10;
+20. Insert a new record into a table:
+INSERT INTO employees (first_name, last_name, department, salary)
+VALUES ('John', 'Doe', 'Engineering', 60000);
+21. Create a new table:
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    department VARCHAR(50),
+    salary DECIMAL(10, 2)
+);
+22. Alter a table to add a new column:
+ALTER TABLE employees ADD hire_date DATE;
+23. Drop a table:
+DROP TABLE employees;
+24. Create an index on a column:
+CREATE INDEX idx_salary ON employees (salary);
+25. Select data from a view:
+SELECT * FROM employee_view;
