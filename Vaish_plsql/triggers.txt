@@ -1,0 +1,96 @@
+updated employee table
+
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,        -- Unique identifier for each employee
+    first_name VARCHAR(100),            -- Employee's first name
+    last_name VARCHAR(100),             -- Employee's last name
+    job_title VARCHAR(100),             -- Employee's job position
+    date_of_joining DATE                -- The date the employee joined the company
+);
+_________________________________________
+updated product table
+CREATE TABLE Products (
+    product_id INT PRIMARY KEY,            -- Unique identifier for each product
+    product_name VARCHAR(255),              -- Name of the product
+    quantity INT,                           -- Quantity of the product available
+    price DECIMAL(10, 2),                   -- Price of the product
+    expiration_date DATE                    -- Expiration date of the product
+);
+____________________________________________
+returns the details of employees joined in a specific  year
+
+DELIMITER $$
+
+CREATE PROCEDURE GetEmployeesByJoinYear(IN join_year INT)
+BEGIN
+    SELECT employee_id, 
+           first_name, 
+           last_name, 
+           job_title, 
+           year_of_joining
+    FROM employees
+    WHERE year_of_joining = join_year;
+END $$
+
+DELIMITER ;
+
+
+CALL GetEmployeesByJoinYear(2020);
+
+
+output:
+
+employee_id	first_name	last_name	job_title	year_of_joining
+1		John		Doe		Software Engineer	2020
+3		Alice		Johnson		HR Manager		2020
+5		Charlie		Brown		Software Engineer	2020
+
+____________________________________________________________
+create a view that display the details of seniormost person
+
+
+CREATE VIEW SeniorMostEmployee AS
+SELECT employee_id,
+       first_name,
+       last_name,
+       job_title,
+       year_of_joining
+FROM employees
+WHERE year_of_joining = (SELECT MIN(year_of_joining) FROM employees);
+
+SELECT * FROM SeniorMostEmployee;
+
+Output:
+employee_id	first_name	last_name	job_title	year_of_joining
+6		David		Wilson		Marketing Lead	2020
+
+
+____________________________________________________________
+
+ advantages and disadvantages of Triggers, Views, and Cursors in SQL:
+
+1. Triggers:
+Advantages:
+Automatic Execution: Triggers automatically execute predefined actions in response to certain events (such as INSERT, UPDATE, or DELETE) on a table, ensuring data consistency and integrity without requiring explicit calls from the user.
+Enforce Business Logic: Triggers can enforce complex business rules or validations automatically whenever certain operations occur on the database, helping maintain consistent data.
+Disadvantages:
+Performance Overhead: Triggers can slow down data modifications (e.g., INSERT, UPDATE, DELETE) because they execute automatically with every relevant event, potentially causing delays in high-volume systems.
+Hidden Logic: Since triggers run in the background, they can make the system behavior harder to understand and troubleshoot, leading to maintenance challenges.
+2. Views:
+Advantages:
+Data Abstraction: Views provide a simplified interface for users by abstracting complex queries and combining data from multiple tables. They allow users to interact with data without worrying about underlying table structure.
+Security: Views can restrict access to sensitive data by only exposing certain columns or rows from a table, effectively creating a layer of security.
+Disadvantages:
+Performance Issues: Views can lead to performance issues when dealing with large datasets or complex queries, especially if the view is built on complex joins or aggregations, as the query will be executed every time the view is accessed.
+Non-updatable Views: In some cases, views may not be updatable (i.e., you cannot perform INSERT, UPDATE, or DELETE directly on them), limiting their flexibility in certain scenarios.
+3. Cursors:
+Advantages:
+Row-by-Row Processing: Cursors allow for row-by-row processing of query results, making them useful when operations need to be performed on individual rows rather than working with sets of data.
+Control Over Result Set: Cursors provide fine-grained control over the iteration and manipulation of data in a result set, enabling more complex processing than standard SQL operations.
+Disadvantages:
+Performance Overhead: Cursors can be inefficient in terms of performance, especially when processing large datasets. They require more resources because each row must be processed individually rather than in bulk.
+Complexity: Using cursors can lead to more complex and harder-to-maintain code. In many cases, set-based operations (using SQL queries) are more efficient and simpler than using cursors.
+
+
+
+
