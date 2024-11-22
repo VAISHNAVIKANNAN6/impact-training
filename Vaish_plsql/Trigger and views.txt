@@ -1,0 +1,57 @@
+trigger
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_salary_update
+AFTER UPDATE ON employees
+FOR EACH ROW
+BEGIN
+    -- Check if salary was updated
+    IF OLD.salary != NEW.salary THEN
+        INSERT INTO salary_log (employee_id, old_salary, new_salary)
+        VALUES (NEW.employee_id, OLD.salary, NEW.salary);
+    END IF;
+END $$
+
+DELIMITER ;
+
+___________________________________________
+Testing the Trigger
+
+UPDATE employees
+SET salary = 65000
+WHERE employee_id = 2;
+
+__________________________________________________
+output:
+log_id	employee_id	old_salary	new_salary	change_date
+1	1		50000.00	55000.00	2024-11-21 12:34:56
+2	2		60000.00	65000.00	2024-11-21 12:35:30
+
+
+_______________________________________________
+view :
+
+CREATE VIEW employee_department_view AS
+SELECT e.employee_id,
+       e.first_name,
+       e.last_name,
+       CONCAT(e.first_name, ' ', e.last_name) AS full_name,
+       e.job_title,
+       d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id;
+
+
+SELECT * FROM employee_department_view;
+
+output :
+employee_id	first_name	last_name	full_name	job_title	department_name
+1	John	Doe	John Doe	Software Engineer	Engineering
+2	Jane	Smith	Jane Smith	Data Scientist	Data Science
+3	Alice	Johnson	Alice Johnson	HR Manager	Engineering
+4	Bob	Lee	Bob Lee	Project Manager	HR
+
+_________________________________________
+
