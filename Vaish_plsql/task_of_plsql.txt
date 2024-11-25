@@ -1,0 +1,288 @@
+1) Stored Procedure to Update Employee Salary
+
+DELIMITER $$
+
+CREATE PROCEDURE UpdateEmployeeSalary (
+    IN emp_id INT,           -- IN parameter for employeeId
+    IN new_salary DECIMAL(10, 2),  -- IN parameter for the new salary
+    OUT updated_salary DECIMAL(10, 2)   -- OUT parameter to return updated salary
+)
+BEGIN
+    -- Update the salary of the employee
+    UPDATE Employee
+    SET salary = new_salary
+    WHERE employeeId = emp_id;
+
+    -- Return the updated salary
+    SELECT salary INTO updated_salary
+    FROM Employee
+    WHERE employeeId = emp_id;
+END $$
+
+DELIMITER ;
+
+O/P
+
+CALL UpdateEmployeeSalary(101, 60000, @updated_salary);
+SELECT @updated_salary;
+
++-----------------+
+| @updated_salary |
++-----------------+
+| 60000.00        |
++-----------------+
+___________________________________________________________________________________________________
+
+2) Function to Display Employees by Location
+
+DELIMITER $$
+
+CREATE FUNCTION GetEmployeesByLocation(loc VARCHAR(255))
+RETURNS TABLE
+DETERMINISTIC
+BEGIN
+    RETURN (
+        SELECT employeeId, Name, salary, location, departmentId, DOJ
+        FROM Employee
+        WHERE location = loc
+    );
+END $$
+
+DELIMITER ;
+
+O/P
+
+SELECT * FROM GetEmployeesByLocation('New York');
+
++------------+------------+--------+-------------+--------------+------------+
+| employeeId | Name       | salary | location    | departmentId | DOJ        |
++------------+------------+--------+-------------+--------------+------------+
+| 101        | John Doe   | 50000  | New York    | 1            | 2020-06-15 |
+| 103        | Emily White| 60000  | New York    | 1            | 2022-03-01 |
++------------+------------+--------+-------------+--------------+------------+
+
+_______________________________________________________________________________________________________
+
+3)View to Display EmployeeId and DepartmentName for Employees in "TN" and "TA" who joined in 2022
+
+CREATE VIEW EmployeesInTNTA2022 AS
+SELECT e.employeeId, d.departmentName
+FROM Employee e
+JOIN Department d ON e.departmentId = d.departmentId
+WHERE d.departmentName IN ('TN', 'TA')
+AND YEAR(e.DOJ) = 2022;
+
+O/P
+
+SELECT * FROM EmployeesInTNTA2022;
+
++------------+----------------+
+| employeeId | departmentName |
++------------+----------------+
+| 103        | TN             |
+| 104        | TA             |
++------------+----------------+
+
+____________________________________________________________________________________________
+
+ChatGPT
+Certainly! Here are some sample outputs for each of the SQL queries and operations you've asked about. I'll give you example scenarios based on the structure and data we’ve used.
+
+1) Stored Procedure to Update Employee Salary
+Stored Procedure: UpdateEmployeeSalary
+sql
+Copy code
+DELIMITER $$
+
+CREATE PROCEDURE UpdateEmployeeSalary (
+    IN emp_id INT,           -- IN parameter for employeeId
+    IN new_salary DECIMAL(10, 2),  -- IN parameter for the new salary
+    OUT updated_salary DECIMAL(10, 2)   -- OUT parameter to return updated salary
+)
+BEGIN
+    -- Update the salary of the employee
+    UPDATE Employee
+    SET salary = new_salary
+    WHERE employeeId = emp_id;
+
+    -- Return the updated salary
+    SELECT salary INTO updated_salary
+    FROM Employee
+    WHERE employeeId = emp_id;
+END $$
+
+DELIMITER ;
+Sample Data:
+
+employeeId	Name	salary	location	departmentId	DOJ
+101	John Doe	50000	New York	1	2020-06-15
+102	Jane Smith	55000	Los Angeles	2	2021-01-10
+Calling the Procedure:
+
+sql
+Copy code
+CALL UpdateEmployeeSalary(101, 60000, @updated_salary);
+SELECT @updated_salary;
+Sample Output:
+
+plaintext
+Copy code
++-----------------+
+| @updated_salary |
++-----------------+
+| 60000.00        |
++-----------------+
+The salary for employeeId = 101 (John Doe) has been updated to 60000, and the procedure returns the updated salary.
+
+2) Function to Display Employees by Location
+Function: GetEmployeesByLocation
+sql
+Copy code
+DELIMITER $$
+
+CREATE FUNCTION GetEmployeesByLocation(loc VARCHAR(255))
+RETURNS TABLE
+DETERMINISTIC
+BEGIN
+    RETURN (
+        SELECT employeeId, Name, salary, location, departmentId, DOJ
+        FROM Employee
+        WHERE location = loc
+    );
+END $$
+
+DELIMITER ;
+Sample Data:
+
+employeeId	Name	salary	location	departmentId	DOJ
+101	John Doe	50000	New York	1	2020-06-15
+102	Jane Smith	55000	Los Angeles	2	2021-01-10
+103	Emily White	60000	New York	1	2022-03-01
+Calling the Function:
+
+sql
+Copy code
+SELECT * FROM GetEmployeesByLocation('New York');
+Sample Output:
+
+plaintext
+Copy code
++------------+------------+--------+-------------+--------------+------------+
+| employeeId | Name       | salary | location    | departmentId | DOJ        |
++------------+------------+--------+-------------+--------------+------------+
+| 101        | John Doe   | 50000  | New York    | 1            | 2020-06-15 |
+| 103        | Emily White| 60000  | New York    | 1            | 2022-03-01 |
++------------+------------+--------+-------------+--------------+------------+
+This output shows all employees located in "New York."
+
+3) View to Display EmployeeId and DepartmentName for Employees in "TN" and "TA" who joined in 2022
+View: EmployeesInTNTA2022
+sql
+Copy code
+CREATE VIEW EmployeesInTNTA2022 AS
+SELECT e.employeeId, d.departmentName
+FROM Employee e
+JOIN Department d ON e.departmentId = d.departmentId
+WHERE d.departmentName IN ('TN', 'TA')
+AND YEAR(e.DOJ) = 2022;
+Sample Data:
+
+employeeId	Name	salary	location	departmentId	DOJ
+101	John Doe	50000	New York	1	2020-06-15
+102	Jane Smith	55000	Los Angeles	2	2021-01-10
+103	Emily White	60000	New York	3	2022-03-01
+104	Chris Lee	65000	San Diego	4	2022-06-10
+Creating the View and Querying:
+
+sql
+Copy code
+SELECT * FROM EmployeesInTNTA2022;
+Sample Output:
+
+plaintext
+Copy code
++------------+----------------+
+| employeeId | departmentName |
++------------+----------------+
+| 103        | TN             |
+| 104        | TA             |
++------------+----------------+
+This output shows employees who joined in 2022 and belong to the "TN" or "TA" department.
+___________________________________________________________________________________________
+
+4) Trigger to Update Department Count After Insertion in Employee Table
+
+DELIMITER $$
+
+CREATE TRIGGER UpdateDepartmentCountAfterInsert
+AFTER INSERT ON Employee
+FOR EACH ROW
+BEGIN
+    -- Update the count of employees in the respective department
+    UPDATE Department
+    SET count = count + 1
+    WHERE departmentId = NEW.departmentId;
+END $$
+
+DELIMITER ;
+
+O/P
+
+INSERT INTO Employee (employeeId, Name, salary, location, departmentId, DOJ)
+VALUES (105, 'Sarah Connor', 70000, 'Austin', 1, '2024-02-01');
+
+
+departmentId	departmentName	count
+1			HR	6
+2			IT	3
+____________________________________________________________________________________________
+
+5) Trigger to Store Updated Salary in History Table
+
+DELIMITER $$
+
+CREATE TRIGGER AfterSalaryUpdate
+AFTER UPDATE ON Employee
+FOR EACH ROW
+BEGIN
+    -- Check if salary has been updated
+    IF OLD.salary != NEW.salary THEN
+        INSERT INTO EmployeeSalaryHistory (employeeId, Name, oldSalary, newSalary, updateTime)
+        VALUES (NEW.employeeId, NEW.Name, OLD.salary, NEW.salary, NOW());
+    END IF;
+END $$
+
+DELIMITER ;
+
+O/P
+CREATE TABLE EmployeeSalaryHistory (
+    employeeId INT,
+    Name VARCHAR(255),
+    oldSalary DECIMAL(10, 2),
+    newSalary DECIMAL(10, 2),
+    updateTime TIMESTAMP
+);
+
+UPDATE Employee
+SET salary = 60000
+WHERE employeeId = 101;
+
+employeeId    Name	 oldSalary	newSalary	updateTime
+101	      John Doe   50000		60000		2024-11-25 10:00:00
+
+__________________________________________________________________________________________________
+
+CREATE INDEX idx_employeeId ON Employee(employeeId);
+CREATE INDEX idx_departmentId ON Employee(departmentId);
+
+O/P
+SELECT * FROM Employee WHERE employeeId = 101;
+
+The query will be faster due to the index on employeeId, as the database can directly access the record instead of performing a full table scan.
+
++------------+-----------+--------+-------------+--------------+------------+
+| employeeId | Name      | salary | location    | departmentId | DOJ        |
++------------+-----------+--------+-------------+--------------+------------+
+| 101        | John Doe  | 60000  | New York    | 1            | 2020-06-15 |
++------------+-----------+--------+-------------+--------------+------------+
+
